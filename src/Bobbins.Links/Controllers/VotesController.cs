@@ -45,17 +45,11 @@ namespace Bobbins.Links.Controllers
             await _context.SaveChangesAsync(ct);
             if (vote.Value > 0)
             {
-                await _context.Database.ExecuteSqlCommandAsync(
-                        "UPDATE Links SET UpVoteCount = UpVoteCount + 1 WHERE Id = @id",
-                        new object[] {vote.LinkId}, ct)
-                    .ConfigureAwait(false);
+                await _context.AddUpVoteAsync(voteDto.LinkId, ct).ConfigureAwait(false);
             }
             else
             {
-                await _context.Database.ExecuteSqlCommandAsync(
-                        "UPDATE Links SET DownVoteCount = DownVoteCount + 1 WHERE Id = @id",
-                        new object[] {vote.LinkId}, ct)
-                    .ConfigureAwait(false);
+                await _context.AddDownVoteAsync(voteDto.LinkId, ct).ConfigureAwait(false);
             }
         }
 
@@ -69,17 +63,11 @@ namespace Bobbins.Links.Controllers
             await _context.SaveChangesAsync(ct);
             if (vote.Value > 0)
             {
-                await _context.Database.ExecuteSqlCommandAsync(
-                        "UPDATE Links SET UpVoteCount = UpVoteCount + 1, DownVoteCount = DownVoteCount - 1 WHERE Id = @id",
-                        new object[] {vote.LinkId}, ct)
-                    .ConfigureAwait(false);
+                await _context.ChangeUpVoteAsync(voteDto.LinkId, ct).ConfigureAwait(false);
             }
             else
             {
-                await _context.Database.ExecuteSqlCommandAsync(
-                        "UPDATE Links SET UpVoteCount = UpVoteCount - 1, DownVoteCount = DownVoteCount + 1 WHERE Id = @id",
-                        new object[] {vote.LinkId}, ct)
-                    .ConfigureAwait(false);
+                await _context.ChangeDownVoteAsync(voteDto.LinkId, ct).ConfigureAwait(false);
             }
             return Accepted();
         }
