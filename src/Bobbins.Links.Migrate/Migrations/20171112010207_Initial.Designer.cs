@@ -11,7 +11,7 @@ using System;
 namespace Bobbins.Links.Migrate.Migrations
 {
     [DbContext(typeof(LinkContext))]
-    [Migration("20171109183440_Initial")]
+    [Migration("20171112010207_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

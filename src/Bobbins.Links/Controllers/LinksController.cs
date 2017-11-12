@@ -50,10 +50,7 @@ namespace Bobbins.Links.Controllers
         [HttpPut("{id}/comment-added")]
         public async Task<IActionResult> CommentAdded(int id, CancellationToken ct)
         {
-            var rows = await _context.Database
-                .ExecuteSqlCommandAsync("UPDATE Links SET CommentCount = CommentCount + 1 WHERE Id = @id",
-                    new object[] {id}, ct)
-                .ConfigureAwait(false);
+            var rows = await _context.IncrementCommentCountAsync(id, ct);
             if (rows == 0)
             {
                 return NotFound();

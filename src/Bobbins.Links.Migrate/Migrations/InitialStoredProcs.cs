@@ -17,6 +17,52 @@ namespace Bobbins.Links.Migrate.Migrations
                           AS 'UPDATE ""Links"" SET ""CommentCount"" = ""CommentCount"" + 1 WHERE ""Id"" = id'
                           LANGUAGE SQL;"
             };
+            
+            yield return new SqlOperation
+            {
+                Sql = @"CREATE FUNCTION add_up_vote(id INTEGER) RETURNS VOID
+                          AS $$
+                            UPDATE ""Links""
+                            SET ""UpVoteCount"" = ""UpVoteCount"" + 1
+                            WHERE ""Id"" = id
+                          $$
+                          LANGUAGE SQL;"
+            };
+            
+            yield return new SqlOperation
+            {
+                Sql = @"CREATE FUNCTION add_down_vote(id INTEGER) RETURNS VOID
+                          AS $$
+                            UPDATE ""Links""
+                            SET ""DownVoteCount"" = ""DownVoteCount"" + 1
+                            WHERE ""Id"" = id
+                          $$
+                          LANGUAGE SQL;"
+            };
+            
+            yield return new SqlOperation
+            {
+                Sql = @"CREATE FUNCTION change_up_vote(id INTEGER) RETURNS VOID
+                          AS $$
+                            UPDATE ""Links""
+                            SET ""UpVoteCount"" = ""UpVoteCount"" + 1,
+                                ""DownVoteCount"" = ""DownVoteCount"" - 1
+                            WHERE ""Id"" = id
+                          $$
+                          LANGUAGE SQL;"
+            };
+            
+            yield return new SqlOperation
+            {
+                Sql = @"CREATE FUNCTION change_down_vote(id INTEGER) RETURNS VOID
+                          AS $$
+                            UPDATE ""Links""
+                            SET ""UpVoteCount"" = ""UpVoteCount"" - 1,
+                                ""DownVoteCount"" = ""DownVoteCount"" + 1
+                            WHERE ""Id"" = id
+                          $$
+                          LANGUAGE SQL;"
+            };
         }
     }
 }

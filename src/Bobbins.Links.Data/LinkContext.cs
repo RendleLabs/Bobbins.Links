@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -29,9 +30,29 @@ namespace Bobbins.Links.Data
 
     public static class LinkContextExtensions
     {
-        public static async Task IncrementCommentCount(this LinkContext context, int linkId)
+        public static async Task<int> IncrementCommentCountAsync(this LinkContext context, int linkId, CancellationToken ct = default)
         {
-            await context.Database.ExecuteSqlCommandAsync("SELECT increment_comment_count({0})", linkId);
+            return await context.Database.ExecuteSqlCommandAsync("SELECT increment_comment_count({0})", new object[] {linkId}, ct);
+        }
+        
+        public static async Task<int> AddUpVoteAsync(this LinkContext context, int linkId, CancellationToken ct = default)
+        {
+            return await context.Database.ExecuteSqlCommandAsync("SELECT add_up_vote({0})", new object[] {linkId}, ct);
+        }
+        
+        public static async Task<int> AddDownVoteAsync(this LinkContext context, int linkId, CancellationToken ct = default)
+        {
+            return await context.Database.ExecuteSqlCommandAsync("SELECT add_down_vote({0})", new object[] {linkId}, ct);
+        }
+        
+        public static async Task<int> ChangeUpVoteAsync(this LinkContext context, int linkId, CancellationToken ct = default)
+        {
+            return await context.Database.ExecuteSqlCommandAsync("SELECT change_up_vote({0})", new object[] {linkId}, ct);
+        }
+        
+        public static async Task<int> ChangeDownVoteAsync(this LinkContext context, int linkId, CancellationToken ct = default)
+        {
+            return await context.Database.ExecuteSqlCommandAsync("SELECT change_down_vote({0})", new object[] {linkId}, ct);
         }
     }
 }

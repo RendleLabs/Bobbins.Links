@@ -24,7 +24,7 @@ namespace Bobbins.Links.Data.IntegrationTests
                 context.Links.Add(link);
                 await context.SaveChangesAsync();
 
-                await context.IncrementCommentCount(link.Id);
+                await context.IncrementCommentCountAsync(link.Id);
                 
                 await context.Entry(link).ReloadAsync();
 

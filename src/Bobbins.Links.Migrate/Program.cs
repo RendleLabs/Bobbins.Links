@@ -12,9 +12,10 @@ namespace Bobbins.Links.Migrate
         public static async Task Main(string[] args)
         {
             var loggerFactory = new LoggerFactory().AddConsole(LogLevel.Information);
-            Console.WriteLine("Trying migration...");
+            var logger = loggerFactory.CreateLogger<Program>();
+            logger.LogInformation("Trying migration...");
             await new MigrationHelper(loggerFactory).TryMigrate(args);
-            Console.WriteLine("Done.");
+            logger.LogInformation("Done.");
         }
     }
 }
