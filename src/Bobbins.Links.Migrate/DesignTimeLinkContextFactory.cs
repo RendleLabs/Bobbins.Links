@@ -1,4 +1,5 @@
-﻿using Bobbins.Links.Data;
+﻿using System.Linq;
+using Bobbins.Links.Data;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -13,7 +14,7 @@ namespace Bobbins.Links.Migrate
         public LinkContext CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<LinkContext>()
-                .UseNpgsql(LocalPostgres, b => b.MigrationsAssembly(GetType().Assembly.GetName().Name));
+                .UseNpgsql(args.FirstOrDefault() ?? LocalPostgres, b => b.MigrationsAssembly(GetType().Assembly.GetName().Name));
             return new LinkContext(builder.Options);
         }
     }
